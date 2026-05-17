@@ -1,12 +1,20 @@
 .grid {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 25% 50%;
         gap: 20px;
     padding: 10px;
 }
-#intro1 {
-   
+#tossContainer {
+    display: none;
 }
-#intro2 {
-   
+
+.lineText {
+    font-size: 11px;
+    margin: 5px 0;
+}
+
+.lineContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

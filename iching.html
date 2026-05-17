@@ -6,53 +6,31 @@
 </head>
 <body>
 
-<h1>The I Ching or, Book of Changes</h1>
+<h1>Book of Changes</h1>
+<h2>All things are impermanent.</h2>
+<p></p>
+<div id="askDiv">
+    <p id="askP">Ask a question.<br><i>Hint: Be specific but open-ended. Avoid yes/no questions.</i></p>
+    <textarea id="userQuestion" name="userQuestion" cols="30" rows="3" placeholder="Enter your question..."></textarea>
+    <button id="askButton" onclick="askQuestion()">Ask</button>
+</div>
 
-<p>The I Ching (pronounced ee-ching) translates to Book of Changes.<br>
-    It orginated as a manual for divination about 3,000 years ago during the Western Zhou period (c. 1000-750 BCE).<br>
-    The book is organized around 78 diagrams:</p>
-<div class="grid">
-    <div id="intro1">
-        <p>2 + 4 + 8 + 64</p>
-    </div>
-    <div id="intro2">
-        <p>The basis of the diagrams are the Two lines: solid (Yang) and broken (Yin).<br>
-    These two lines create Four Elements.<br>
-    The Four Elements build Eight Trigrams.<br>
-    The Eight Trigrams combine to create 64 Hexagrams.</p>
-    </div>
-</div>
-<h2>Instructions</h2>
-<p>To Generate a Hexagram you need six lines.<br>A line is created by tossing three coins:</p>
-<div class="grid">
+<div id="tossContainer" class="grid">
     <div>
-        <p>Heads = 3<br>Tails = 2</p>
+        <p id="tossBtnMessage">Focus on your question and toss the coins.</p>
+        <button id="tossButton" onclick="multipleFunctions()">Toss Coins</button>
     </div>
-    <div>
-        <p>3 heads = 9 (Changing Yang)<br>2 heads + 1 tail = 8 (Yin)<br>1 head + 2 tails = 7 (Yang)<br>3 tails = 6 (Changing Yin)</p>
-    </div>
-</div>
-<!-- question section -->
-<div id="questionSection">
-    <p>Ask a question.<br><i>Hint: Be specific and open-ended. Avoid yes/no questions.</i></p>
-    <form id="questionForm" method="post">
-        <textarea id="userQuestion" name="userQuestion" cols="30" rows="3" placeholder="Enter your question..."></textarea>
-        <input type="submit" />
-    </form>
-    
-</div>
-<!-- throwing section hidden until question is asked -->
-<div id="throwingSection">
-<p>Press the button to toss 3 coins and generate a line.</p>
-<div class="grid">
-    <div id="tossButton">
-        <button onclick="coinToss()">Toss Coins</button>
-    </div>
-    <div id="result">
-        <p id="lineValue"></p>
+    <div id="lineValues">    
     </div>
 </div>
+
+<div class="grid" id="hexagramContainer">
+    <h2 id="hexagramName"></h2>
+    <p id="hexagramImage"></p>
+    <p id="hexagramJudgement"></p>
+    <p id="hexagramJudgementDescription"></p>
 </div>
+
 
 
 
