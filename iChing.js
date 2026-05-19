@@ -1,81 +1,84 @@
-// ask button
+function boldLabel(text) {
+    const p = document.createElement("p");
+    const strong = document.createElement("strong");
+    strong.textContent = text;
+    p.appendChild(strong);
+    return p;
+}
+
+// tossCount and lineTypes track the six coin tosses that build one hexagram
+let tossCount = 0;
+let lineTypes = []; // raw sums (6–9) for each line, used to identify changing lines
+let biNum = [];     // binary digits (0=yin, 1=yang) per line, bottom to top, for hexagram lookup
+
 function askQuestion() {
     const userQuestion = document.getElementById("userQuestion").value;
-    if(userQuestion.trim() === "") {
+    if (userQuestion.trim() === "") {
         alert("Please enter a question.");
         return;
     } else {
-        document.getElementById("askP").innerHTML = "Your question: " + userQuestion;    
+        document.getElementById("askP").textContent = "Your question: " + userQuestion;
         document.getElementById("userQuestion").style.display = "none";
         document.getElementById("askButton").style.display = "none";
         document.getElementById("tossContainer").style.display = "grid";
     }
 }
 
-// return a random boolean value, with a 45% chance of being true and a 55% chance of being false
+// Returns 3 (heads/yang) or 2 (tails/yin); biased below 0.5 to weight yin slightly heavier
 function randomBoolean() {
-    if(Math.random() < .45) {
+    if (Math.random() < .45) {
         return 3;
     } else {
         return 2;
     }
-} 
-// simulate tossing three coins and return the corresponding I Ching line type string, image and binary value (0 for yin, 1 for yang).
+}
+
 function coinToss() {
     let threeCoins = [];
-    for(let i= 0; i<3; i++) {
-        threeCoins.push(randomBoolean()); 
-        }
-    let csum = threeCoins.reduce((a, b) => a + b, 0);
-    let lName = "";
-    let lImg = "";
-    let bi;
-    if(csum === 6) {
-        lName = "Changing Yin";
-        lImg = "img/yin6.png";
-        bi = 0;
-    } else if(csum === 7) {
-        lName = "Stable Yang";
-        lImg = "img/yang7.png";
-        bi = 1;
-    } else if(csum === 8) {
-        lName = "Stable Yin";
-        lImg = "img/yin8.png";
-        bi = 0;
-    } else if(csum === 9) {
-        lName = "Changing Yang";
-        lImg = "img/yang9.png";
-        bi = 1;
+    for (let i = 0; i < 3; i++) {
+        threeCoins.push(randomBoolean());
     }
+    // Each coin is 2 or 3, so the sum of three coins falls in the range 6–9
+    const csum = threeCoins.reduce((a, b) => a + b, 0);
+    // 6 = old yin (changes to yang), 7 = stable yang, 8 = stable yin, 9 = old yang (changes to yin)
+    // rBi is the binary value of the line's *current* state: yin=0, yang=1
+    const lineMap = {
+        6: { name: "Changing Yin",  img: "img/yin6.png",  rBi: 0 },
+        7: { name: "Stable Yang",   img: "img/yang7.png", rBi: 1 },
+        8: { name: "Stable Yin",    img: "img/yin8.png",  rBi: 0 },
+        9: { name: "Changing Yang", img: "img/yang9.png", rBi: 1 }
+    };
+    const { name, img, rBi } = lineMap[csum];
     return {
-        text:`${lName} (${threeCoins[0]}+${threeCoins[1]}+${threeCoins[2]}=${csum})`,
-        img: lImg,
+        text: `${name} (${threeCoins[0]}+${threeCoins[1]}+${threeCoins[2]}=${csum})`,
+        img: img,
         number: csum,
-        rBi: bi
-    };      
+        rBi: rBi
+    };
 }
-// create a new div element for each line generated, containing the line type text and image, and prepend it to the lineValues div
-function createLineElement(lineName) {
+
+// Lines are displayed newest-on-top so they read bottom-to-top (line 1 at the bottom)
+function createLineElement(toss) {
     const lineDiv = document.getElementById("lineValues");
     const container = document.createElement("div");
     container.classList.add("lineContainer");
     const lineElement = document.createElement("p");
-    lineElement.textContent = lineName.text;
+    lineElement.textContent = toss.text;
     lineElement.classList.add("lineText");
-    
     const imgElement = document.createElement("img");
-    imgElement.src = lineName.img;
-    
+    imgElement.src = toss.img;
     container.appendChild(imgElement);
     container.appendChild(lineElement);
-    lineDiv.prepend(container);
-
+    lineDiv.prepend(container); // prepend so each new line appears above the previous one
 }
 
 function divinationResult() {
-    const reverseBi = [...biNum].reverse().join("");
+    // hexagramData uses the top line as the MSB, so biNum (bottom-first) must be reversed
+    // before joining into a binary string and parsing to an integer for lookup
+    const reverseBi = [...biNum].reverse().join(""); // spread to avoid mutating the module-level biNum
     const syBi = parseInt(reverseBi, 2);
 
+    // hexagramData is a global object loaded from hexagrams.js; each entry has a `sy` field
     let hexagram = null;
     let hexagramKey = null;
     for (const key in hexagramData) {
@@ -99,22 +102,16 @@ function divinationResult() {
     document.getElementById("hexagramJudgementDescription").textContent = hexagram["judgement description"];
     document.getElementById("hexagramContainer").style.display = "block";
 
+    // Sums 6 (old yin) and 9 (old yang) are the two changing line types
     const lineNames = ["1st", "2nd", "3rd", "4th", "5th", "6th"];
     const hasChanging = lineTypes.some(t => t === 6 || t === 9);
     if (!hasChanging) return;
 
     const changingContainer = document.getElementById("changingLinesContainer");
 
-    function boldLabel(text) {
-        const p = document.createElement("p");
-        const strong = document.createElement("strong");
-        strong.textContent = text;
-        p.appendChild(strong);
-        return p;
-    }
-
     changingContainer.appendChild(boldLabel("Changing Lines"));
 
+    // When every line changes, tradition uses a single special reading instead of per-line entries
     if (lineTypes.every(t => t === 6 || t === 9)) {
         const entry = hexagram.changing["all"];
         if (entry) {
@@ -134,6 +131,7 @@ function divinationResult() {
         });
     }
 
+    // Derive the secondary hexagram by flipping each changing line (yin↔yang, i.e. 0↔1)
     const newBiNum = biNum.map((bit, i) =>
         (lineTypes[i] === 6 || lineTypes[i] === 9) ? 1 - bit : bit
     );
@@ -161,20 +159,17 @@ function divinationResult() {
     }
 }
 
-let tossCount = 0;
-let lineTypes = [];
-let biNum = [];
-
-function multipleFunctions() {
-    if(tossCount >= 6) return;
+// A hexagram requires exactly 6 lines; guard against extra button presses
+function handleToss() {
+    if (tossCount >= 6) return;
     const result = coinToss();
     lineTypes.push(result.number);
     biNum.push(result.rBi);
     createLineElement(result);
     tossCount++;
-    let togo = 6 - tossCount;
+    const togo = 6 - tossCount;
     document.getElementById("tossBtnMessage").textContent = ` ${togo} to go.`;
-    if(tossCount === 6) {
+    if (tossCount === 6) {
         divinationResult();
     }
 }

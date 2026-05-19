@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I Ching</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Ching</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="stack">
-
     <div class="box">
         <h1>Book of Changes</h1>
         <h2>All things are impermanent.</h2>
@@ -21,10 +20,10 @@
         <button id="askButton" onclick="askQuestion()">Ask</button>
     </div>
 
-    <div id="tossContainer" class="box grid">
+    <div id="tossContainer" class="box">
         <div>
             <p id="tossBtnMessage">Focus on your question and toss the coins.</p>
-            <button id="tossButton" onclick="multipleFunctions()">Toss Coins</button>
+            <button id="tossButton" onclick="handleToss()">Toss Coins</button>
         </div>
         <div id="lineValues"></div>
     </div>
@@ -40,7 +39,6 @@
         <p id="hexagramJudgementDescription"></p>
         <div id="changingLinesContainer"></div>
     </div>
-
 </div>
 
 <script src="hexagrams.js"></script>

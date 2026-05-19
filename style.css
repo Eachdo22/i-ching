@@ -1,5 +1,7 @@
+/* Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Layout */
 body {
     font-family: Helvetica, Arial, sans-serif;
     display: flex;
@@ -10,7 +12,7 @@ body {
 }
 
 .stack {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 640px;
@@ -21,8 +23,10 @@ body {
     padding: 24px 32px;
 }
 
+/* Negative margin collapses adjacent box borders into a single line */
 .box + .box { margin-top: -3px; }
 
+/* Typography */
 h1 {
     font-size: 2rem;
     letter-spacing: 0.08em;
@@ -50,6 +54,7 @@ p {
 
 p:first-child { margin-top: 0; }
 
+/* Form elements */
 textarea {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 1rem;
@@ -76,16 +81,26 @@ button {
 
 button:hover { background: #f5f5f5; }
 
-#tossContainer {
-    display: none;
+/* Coin toss */
+.lineText {
+    font-size: 0.8rem;
+    margin: 4px 0;
 }
 
-.grid {
-    display: grid;
+.lineContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Hidden by default; JS sets display to "grid" to reveal, so grid properties must live here */
+#tossContainer {
+    display: none;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
+/* Hexagram result */
 #hexagramContainer {
     display: none;
 }
@@ -105,17 +120,7 @@ button:hover { background: #f5f5f5; }
     white-space: pre-line;
 }
 
-.lineText {
-    font-size: 0.8rem;
-    margin: 4px 0;
-}
-
-.lineContainer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
+/* Changing lines */
 #changingLinesContainer {
     margin-top: 20px;
     padding-top: 20px;
