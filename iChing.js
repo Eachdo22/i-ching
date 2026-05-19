@@ -12,9 +12,9 @@ function askQuestion() {
     }
 }
 
-// return a random boolean value, with a 30% chance of being true and a 70% chance of being false
+// return a random boolean value, with a 45% chance of being true and a 55% chance of being false
 function randomBoolean() {
-    if(Math.random() < .35) {
+    if(Math.random() < .45) {
         return 3;
     } else {
         return 2;
@@ -29,6 +29,7 @@ function coinToss() {
     let csum = threeCoins.reduce((a, b) => a + b, 0);
     let lName = "";
     let lImg = "";
+    let bi;
     if(csum === 6) {
         lName = "Changing Yin";
         lImg = "img/yin6.png";
@@ -70,21 +71,94 @@ function createLineElement(lineName) {
     lineDiv.prepend(container);
 
 }
-//function makeBinary(biArray)
-//    biArray.
 
 function divinationResult() {
-    // This function will be called after all 6 lines are generated
-    // It will determine the hexagram based on the line types and display the result
-    // You can use the line types to look up the corresponding hexagram in your Hexagrams.json file
-    // Then display the hexagram name, image, judgement, and description in the hexagramContainer div
-    let reverseBi = biNum.reverse().join("");
-    let syBi = parseInt(reverseBi, 2);
-    console.log(biNum);
-    console.log(reverseBi);
-    console.log(lineTypes)
-    console.log(syBi);
+    const reverseBi = [...biNum].reverse().join("");
+    const syBi = parseInt(reverseBi, 2);
 
+    let hexagram = null;
+    let hexagramKey = null;
+    for (const key in hexagramData) {
+        if (hexagramData[key].sy === syBi) {
+            hexagram = hexagramData[key];
+            hexagramKey = key;
+            break;
+        }
+    }
+    if (!hexagram) return;
+
+    document.getElementById("tossContainer").style.display = "none";
+
+    const imgEl = document.getElementById("hexagramImage");
+    imgEl.src = hexagram.png;
+    imgEl.alt = hexagram.name;
+    document.getElementById("hexagramName").textContent = `${hexagramKey}. ${hexagram.name}`;
+    document.getElementById("hexagramOverallImage").textContent = hexagram["overall image"];
+    document.getElementById("hexagramImageDescription").textContent = hexagram["image description"];
+    document.getElementById("hexagramJudgement").textContent = hexagram.judgement;
+    document.getElementById("hexagramJudgementDescription").textContent = hexagram["judgement description"];
+    document.getElementById("hexagramContainer").style.display = "block";
+
+    const lineNames = ["1st", "2nd", "3rd", "4th", "5th", "6th"];
+    const hasChanging = lineTypes.some(t => t === 6 || t === 9);
+    if (!hasChanging) return;
+
+    const changingContainer = document.getElementById("changingLinesContainer");
+
+    function boldLabel(text) {
+        const p = document.createElement("p");
+        const strong = document.createElement("strong");
+        strong.textContent = text;
+        p.appendChild(strong);
+        return p;
+    }
+
+    changingContainer.appendChild(boldLabel("Changing Lines"));
+
+    if (lineTypes.every(t => t === 6 || t === 9)) {
+        const entry = hexagram.changing["all"];
+        if (entry) {
+            const p = document.createElement("p");
+            p.textContent = entry.text;
+            changingContainer.appendChild(p);
+        }
+    } else {
+        lineTypes.forEach((type, i) => {
+            if (type !== 6 && type !== 9) return;
+            const entry = hexagram.changing[lineNames[i]];
+            if (!entry) return;
+            changingContainer.appendChild(boldLabel(`${lineNames[i]} line`));
+            const p = document.createElement("p");
+            p.textContent = entry.text;
+            changingContainer.appendChild(p);
+        });
+    }
+
+    const newBiNum = biNum.map((bit, i) =>
+        (lineTypes[i] === 6 || lineTypes[i] === 9) ? 1 - bit : bit
+    );
+    const newSyBi = parseInt([...newBiNum].reverse().join(""), 2);
+
+    for (const key in hexagramData) {
+        if (hexagramData[key].sy !== newSyBi) continue;
+        const newHex = hexagramData[key];
+
+        changingContainer.appendChild(boldLabel(`Changes to: ${key}. ${newHex.name}`));
+
+        const newImg = document.createElement("img");
+        newImg.src = newHex.png;
+        newImg.alt = newHex.name;
+        changingContainer.appendChild(newImg);
+
+        changingContainer.appendChild(boldLabel("Overall Image"));
+        const newOverallImage = document.createElement("p");
+        newOverallImage.textContent = newHex["overall image"];
+        changingContainer.appendChild(newOverallImage);
+        const newImageDesc = document.createElement("p");
+        newImageDesc.textContent = newHex["image description"];
+        changingContainer.appendChild(newImageDesc);
+        break;
+    }
 }
 
 let tossCount = 0;
@@ -101,10 +175,6 @@ function multipleFunctions() {
     let togo = 6 - tossCount;
     document.getElementById("tossBtnMessage").textContent = ` ${togo} to go.`;
     if(tossCount === 6) {
-        document.getElementById("tossButton").style.display = "none";
-        document.getElementById("tossBtnMessage").style.display = "none";
-        
         divinationResult();
     }
 }
-console.log();

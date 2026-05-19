@@ -1,20 +1,123 @@
-.grid {
-    display: grid;
-    grid-template-columns: 25% 50%;
-        gap: 20px;
-    padding: 10px;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 100vh;
 }
+
+.stack {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 640px;
+}
+
+.box {
+    border: 3px solid #000;
+    padding: 24px 32px;
+}
+
+.box + .box { margin-top: -3px; }
+
+h1 {
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #000;
+    text-align: center;
+}
+
+h2 {
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #111;
+    text-align: center;
+    font-weight: normal;
+    margin-top: 6px;
+}
+
+p {
+    font-size: 1rem;
+    color: #111;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+p:first-child { margin-top: 0; }
+
+textarea {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    border: 1px solid #000;
+    padding: 8px;
+    width: 100%;
+    margin-top: 14px;
+    resize: vertical;
+}
+
+button {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #000;
+    background: none;
+    border: 1px solid #000;
+    box-shadow: 2px 2px 0 #000;
+    cursor: pointer;
+    padding: 8px 20px;
+    margin-top: 16px;
+}
+
+button:hover { background: #f5f5f5; }
+
 #tossContainer {
     display: none;
 }
 
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+#hexagramContainer {
+    display: none;
+}
+
+#hexagramImage {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 16px;
+}
+
+#hexagramName {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+#hexagramContainer p {
+    white-space: pre-line;
+}
+
 .lineText {
-    font-size: 11px;
-    margin: 5px 0;
+    font-size: 0.8rem;
+    margin: 4px 0;
 }
 
 .lineContainer {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+#changingLinesContainer {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #000;
 }

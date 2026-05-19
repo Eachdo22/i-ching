@@ -1,40 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>I Ching</title> 
-<link rel="stylesheet" href="style.css">  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Ching</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Book of Changes</h1>
-<h2>All things are impermanent.</h2>
-<p></p>
-<div id="askDiv">
-    <p id="askP">Ask a question.<br><i>Hint: Be specific but open-ended. Avoid yes/no questions.</i></p>
-    <textarea id="userQuestion" name="userQuestion" cols="30" rows="3" placeholder="Enter your question..."></textarea>
-    <button id="askButton" onclick="askQuestion()">Ask</button>
-</div>
+<div class="stack">
 
-<div id="tossContainer" class="grid">
-    <div>
-        <p id="tossBtnMessage">Focus on your question and toss the coins.</p>
-        <button id="tossButton" onclick="multipleFunctions()">Toss Coins</button>
+    <div class="box">
+        <h1>Book of Changes</h1>
+        <h2>All things are impermanent.</h2>
     </div>
-    <div id="lineValues">    
+
+    <div class="box" id="askDiv">
+        <p id="askP">Ask a question.<br><i>Hint: Be specific but open-ended. Avoid yes/no questions.</i></p>
+        <textarea id="userQuestion" name="userQuestion" rows="3" placeholder="Enter your question..."></textarea>
+        <button id="askButton" onclick="askQuestion()">Ask</button>
     </div>
+
+    <div id="tossContainer" class="box grid">
+        <div>
+            <p id="tossBtnMessage">Focus on your question and toss the coins.</p>
+            <button id="tossButton" onclick="multipleFunctions()">Toss Coins</button>
+        </div>
+        <div id="lineValues"></div>
+    </div>
+
+    <div id="hexagramContainer" class="box">
+        <img id="hexagramImage" src="" alt="">
+        <h2 id="hexagramName"></h2>
+        <p><strong>Overall Image</strong></p>
+        <p id="hexagramOverallImage"></p>
+        <p id="hexagramImageDescription"></p>
+        <p><strong>Judgment</strong></p>
+        <p id="hexagramJudgement"></p>
+        <p id="hexagramJudgementDescription"></p>
+        <div id="changingLinesContainer"></div>
+    </div>
+
 </div>
 
-<div class="grid" id="hexagramContainer">
-    <h2 id="hexagramName"></h2>
-    <p id="hexagramImage"></p>
-    <p id="hexagramJudgement"></p>
-    <p id="hexagramJudgementDescription"></p>
-</div>
-
-
-
-
-
+<script src="hexagrams.js"></script>
 <script src="iChing.js"></script>
 </body>
 </html>
